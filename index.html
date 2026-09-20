@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember</title>
+<meta name="description" content="An eight-course tasting menu built entirely over open fire. Reservations open six weeks out.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#151210;
+    --char-2:#1e1a16;
+    --cream:#f2e9db;
+    --cream-dim:#c9b99f;
+    --ember:#e07a3c;
+    --ember-bright:#f6a75c;
+    --line:rgba(242,233,219,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--char);
+    color:var(--cream);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .serif{font-family:'Italiana',serif;font-weight:400;}
+  .wrap{max-width:1200px;margin:0 auto;padding-inline:36px;position:relative;z-index:3;}
+
+  #embers{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+  header{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding-block:32px;}
+  .mark{font-family:'Italiana',serif;font-size:1.7rem;letter-spacing:0.05em;}
+  nav{display:flex;gap:40px;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cream-dim);}
+  nav a:hover{color:var(--ember-bright);}
+
+  .hero{
+    position:relative;height:88vh;min-height:560px;
+    display:flex;align-items:flex-end;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:-10%;z-index:0;
+    background:
+      linear-gradient(180deg, rgba(21,18,16,0.15) 0%, rgba(21,18,16,0.95) 92%),
+      url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1800&auto=format&fit=crop') center 40%/cover;
+    will-change:transform;
+  }
+  .hero-content{position:relative;z-index:2;padding-bottom:64px;width:100%;}
+  .hero-eyebrow{font-size:0.85rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--ember-bright);margin-bottom:22px;}
+  h1.serif{font-size:clamp(3.2rem,8vw,6.4rem);line-height:1;margin:0 0 24px;text-wrap:balance;}
+  h1.serif em{font-style:italic;color:var(--ember);}
+  .hero-content p{max-width:44ch;color:var(--cream-dim);font-size:1.15rem;line-height:1.7;margin:0 0 34px;}
+  .btn{
+    font-size:0.82rem;letter-spacing:0.14em;text-transform:uppercase;
+    padding:16px 32px;display:inline-block;border:1px solid var(--ember);
+    transition:background .3s, color .3s;
+  }
+  .btn:hover{background:var(--ember);color:var(--char);}
+
+  section{position:relative;z-index:5;padding-block:100px;}
+  .fade-up{opacity:0;transform:translateY(30px);transition:opacity .9s ease, transform .9s ease;}
+  .fade-up.in{opacity:1;transform:none;}
+
+  .intro-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;align-items:center;}
+  .intro-grid img{width:100%;aspect-ratio:4/5;object-fit:cover;}
+  .intro-text .eyebrow{font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember-bright);display:block;margin-bottom:20px;}
+  .intro-text h2.serif{font-size:clamp(2rem,3.6vw,3rem);margin:0 0 24px;}
+  .intro-text p{color:var(--cream-dim);font-size:1.1rem;line-height:1.8;margin:0 0 18px;}
+
+  .menu-list{max-width:820px;margin:0 auto;}
+  .menu-head{text-align:center;margin-bottom:64px;}
+  .menu-head .eyebrow{font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember-bright);display:block;margin-bottom:18px;}
+  .menu-head h2.serif{font-size:clamp(2rem,3.6vw,3rem);}
+  .menu-item{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding-block:26px;border-top:1px solid var(--line);}
+  .menu-item:last-child{border-bottom:1px solid var(--line);}
+  .menu-item .course{}
+  .menu-item .course .n{font-size:0.75rem;color:var(--ember);letter-spacing:0.14em;display:block;margin-bottom:6px;}
+  .menu-item .course h3{font-family:'Italiana',serif;font-weight:400;font-size:1.4rem;margin:0;}
+  .menu-item .course p{margin:6px 0 0;color:var(--cream-dim);font-size:0.95rem;}
+  .menu-item .price{font-family:'Italiana',serif;font-size:1rem;color:var(--cream-dim);white-space:nowrap;}
+
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+  .gallery img{aspect-ratio:1;object-fit:cover;filter:saturate(1.05) contrast(1.05);transition:transform .5s ease;}
+  .gallery a:hover img{transform:scale(1.05);}
+
+  .cta-final{text-align:center;}
+  .cta-final .eyebrow{font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember-bright);display:block;margin-bottom:20px;}
+  .cta-final h2.serif{font-size:clamp(2.2rem,4vw,3.4rem);max-width:16ch;margin:0 auto 24px;}
+  .cta-final p{color:var(--cream-dim);max-width:44ch;margin:0 auto 36px;font-size:1.1rem;}
+
+  footer{position:relative;z-index:5;padding-block:44px;border-top:1px solid var(--line);}
+  .foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:0.8rem;color:var(--cream-dim);letter-spacing:0.04em;}
+
+  @media (max-width:880px){
+    .wrap{padding-inline:20px;}
+    nav{display:none;}
+    .intro-grid{grid-template-columns:1fr;gap:32px;}
+    .menu-item{flex-direction:column;gap:6px;}
+    .gallery{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<canvas id="embers"></canvas>
+
+<div class="wrap">
+  <header>
+    <div class="mark">Ember</div>
+    <nav>
+      <a href="#story">Story</a>
+      <a href="#menu">Menu</a>
+      <a href="#reserve">Reserve</a>
+    </nav>
+  </header>
+</div>
+
+<div class="hero">
+  <div class="hero-bg" id="parallax"></div>
+  <div class="wrap">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Eight Courses — Open Fire Only</span>
+      <h1 class="serif">Nothing here<br>touches a <em>flame</em> you can't see.</h1>
+      <p>Every course at Ember is cooked over live coals, in view of the table. No gas, no induction — just wood, ember, and eleven years of learning where the heat actually is.</p>
+      <a href="#reserve" class="btn">Request a table</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section id="story">
+    <div class="intro-grid fade-up">
+      <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?q=80&w=900&auto=format&fit=crop" alt="Chef tending an open flame grill at Ember">
+      <div class="intro-text">
+        <span class="eyebrow">The Kitchen</span>
+        <h2 class="serif">One hearth, no line cooks.</h2>
+        <p>There are four people in the kitchen on any given night, and all four are standing at the same fire. Ember doesn't run a line — it runs a hearth, the way it was cooked before kitchens had corners.</p>
+        <p>Chef Mireille Okonkwo built the restaurant around a single custom-forged grill that can hold coal at nine different heights, and most nights, she's the one moving the food between them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu">
+    <div class="menu-list">
+      <div class="menu-head fade-up">
+        <span class="eyebrow">Tonight's Tasting</span>
+        <h2 class="serif">Eight Courses</h2>
+      </div>
+      <div class="fade-up">
+        <div class="menu-item">
+          <div class="course"><span class="n">I</span><h3>Charred Leeks, Ember Ash</h3><p>Whole leek, buried in coal for forty minutes, split at the table.</p></div>
+          <span class="price">—</span>
+        </div>
+        <div class="menu-item">
+          <div class="course"><span class="n">II</span><h3>Live-Fire Oysters</h3><p>Finished ten inches above open flame, smoked butter, sea grapes.</p></div>
+          <span class="price">—</span>
+        </div>
+        <div class="menu-item">
+          <div class="course"><span class="n">III</span><h3>Whole Roasted Turbot</h3><p>Cooked bone-in over apple wood, brought whole, carved tableside.</p></div>
+          <span class="price">—</span>
+        </div>
+        <div class="menu-item">
+          <div class="course"><span class="n">IV</span><h3>Dry-Aged Ribeye, 42 Days</h3><p>Reverse-seared over coal, rested on the bone it was aged on.</p></div>
+          <span class="price">—</span>
+        </div>
+        <div class="menu-item">
+          <div class="course"><span class="n">V</span><h3>Smoked Honey, Burnt Cream</h3><p>The only course that leaves the hearth before it reaches the table.</p></div>
+          <span class="price">—</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery-s">
+    <div class="menu-head fade-up">
+      <span class="eyebrow">The Room</span>
+      <h2 class="serif">Twenty-six seats, one fire.</h2>
+    </div>
+    <div class="gallery fade-up">
+      <a href="#"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=700&auto=format&fit=crop" alt="Warmly lit dining room interior at Ember"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=700&auto=format&fit=crop" alt="Close-up of a plated dish cooked over fire"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?q=80&w=700&auto=format&fit=crop" alt="Glowing coals and flame at the open hearth"></a>
+    </div>
+  </section>
+
+  <section id="reserve">
+    <div class="cta-final fade-up">
+      <span class="eyebrow">Reservations</span>
+      <h2 class="serif">Tables open six weeks out, to the minute.</h2>
+      <p>We release the next six-week window every Sunday at noon. Twenty-six seats, one seating, no exceptions.</p>
+      <a href="#" class="btn">Join the waitlist</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <span>EMBER — OPEN FIRE TASTING MENU</span>
+      <span>TUE–SAT, ONE SEATING, 26 SEATS</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // parallax hero
+  var parallax = document.getElementById('parallax');
+  function onScroll(){
+    var y = window.scrollY;
+    parallax.style.transform = 'translateY(' + (y * 0.25) + 'px)';
+  }
+  if (!reduced){
+    window.addEventListener('scroll', onScroll, {passive:true});
+  }
+
+  // rising embers canvas
+  var canvas = document.getElementById('embers');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  function spawn(){
+    particles.push({
+      x: Math.random()*canvas.width,
+      y: canvas.height + 10,
+      r: Math.random()*2 + 0.6,
+      speed: Math.random()*0.6 + 0.3,
+      drift: (Math.random()-0.5)*0.4,
+      life: 0,
+      maxLife: Math.random()*400 + 300,
+      hue: Math.random() > 0.5 ? '224,122,60' : '246,167,92'
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if (particles.length < 60 && Math.random() < 0.5) spawn();
+    for (var i=particles.length-1;i>=0;i--){
+      var p = particles[i];
+      p.y -= p.speed;
+      p.x += p.drift;
+      p.life++;
+      var fade = 1 - (p.life / p.maxLife);
+      if (fade <= 0 || p.y < -10){ particles.splice(i,1); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(' + p.hue + ',' + (fade*0.7).toFixed(2) + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  try{
+    resize();
+    window.addEventListener('resize', resize);
+    if (!reduced) requestAnimationFrame(draw);
+  }catch(e){}
+
+  // scroll reveal
+  try{
+    var els = document.querySelectorAll('.fade-up');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, {threshold:0.15});
+    els.forEach(function(el){ io.observe(el); });
+  }catch(e){
+    document.querySelectorAll('.fade-up').forEach(function(el){ el.classList.add('in'); });
+  }
+})();
+</script>
+
+</body>
+</html>
